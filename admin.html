@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - OTOP ชุมชนบ้านนาเวียง</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="/index.html" class="nav-logo-container animate-fadeIn">
+                <img src="img/logo-main.png" alt="โลโก้ OTOP" class="nav-logo">
+            </a>
+            <button class="logout-btn" onclick="logout()">ออกจากระบบ</button>
+        </div>
+    </nav>
+
+    <main>
+        <div class="dashboard-container">
+            <div class="dashboard-header reveal">
+                <h1>Admin Dashboard</h1>
+                <p>จัดการผู้ใช้งาน ยอดขาย และสถานะการชำระเงินของร้าน OTOP ชุมชนบ้านนาเวียง</p>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="summary-cards reveal">
+                <div class="summary-card animate-fadeInUp" style="animation-delay: 0.1s;">
+                    <i class="fas fa-users"></i>
+                    <h3>จำนวนผู้ใช้</h3>
+                    <p id="total-users">0</p>
+                </div>
+                <div class="summary-card animate-fadeInUp" style="animation-delay: 0.2s;">
+                    <i class="fas fa-wallet"></i>
+                    <h3>ยอดขายรวม</h3>
+                    <p id="total-sales">0 บาท</p>
+                </div>
+                <div class="summary-card animate-fadeInUp" style="animation-delay: 0.3s;">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>จำนวนคำสั่งซื้อ</h3>
+                    <p id="total-orders">0</p>
+                </div>
+                <div class="summary-card animate-fadeInUp" style="animation-delay: 0.4s;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h3>รอชำระ</h3>
+                    <p id="pending-orders">0</p>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section reveal">
+                <h3>ภาพรวมข้อมูล</h3>
+                <div class="summary-cards">
+                    <div class="chart-container animate-fadeInUp" style="animation-delay: 0.1s;">
+                        <h4 style="font-size: 20px; color: #f59e0b; margin-bottom: 16px;">ยอดขายตามวัน</h4>
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                    <div class="chart-container animate-fadeInUp" style="animation-delay: 0.2s;">
+                        <h4 style="font-size: 20px; color: #f59e0b; margin-bottom: 16px;">ผู้ใช้ที่ซื้อ/ไม่ซื้อ</h4>
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management Table -->
+            <div class="table-section reveal">
+                <h3>จัดการผู้ใช้งาน</h3>
+                <div class="table-container">
+                    <table id="user-table">
+                        <thead>
+                            <tr>
+                                <th>ชื่อ</th>
+                                <th>อีเมล</th>
+                                <th>เบอร์โทร</th>
+                                <th>ที่อยู่</th>
+                                <th>การจัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sales & Payment Table -->
+            <div class="table-section reveal">
+                <h3>ยอดขายและการชำระเงิน</h3>
+                <div class="table-container">
+                    <table id="sales-table">
+                        <thead>
+                            <tr>
+                                <th>รหัสคำสั่งซื้อ</th>
+                                <th>วันที่</th>
+                                <th>อีเมลผู้ซื้อ</th>
+                                <th>สินค้า</th>
+                                <th>จำนวน</th>
+                                <th>ยอดรวม</th>
+                                <th>สถานะ</th>
+                                <th>การจัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sales-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Custom Alert -->
+    <div class="custom-alert-overlay" id="alert-overlay" onclick="closeCustomAlert()">
+        <div class="custom-alert" onclick="event.stopPropagation()">
+            <div class="alert-content">
+                <i id="alert-icon" class="fas fa-check-circle"></i>
+                <h4 id="alert-title">สำเร็จ!</h4>
+                <p id="alert-message">ข้อความแจ้งเตือน</p>
+            </div>
+            <button onclick="closeCustomAlert()">ตกลง</button>
+        </div>
+    </div>
+
+    <!-- Purchase Detail Modal -->
+    <div class="purchase-detail-overlay" id="purchase-detail-overlay" onclick="closePurchaseDetail()">
+        <div class="purchase-detail-modal" onclick="event.stopPropagation()">
+            <h4>รายละเอียดคำสั่งซื้อ</h4>
+            <div id="purchase-detail-content"></div>
+            <button onclick="closePurchaseDetail()">ปิด</button>
+        </div>
+    </div>
+
+    <script>
+        // Check admin access
+        function checkAdminAccess() {
+            const loggedInEmail = localStorage.getItem('loggedInEmail');
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.email === loggedInEmail);
+            if (!user || !user.isAdmin) {
+                showCustomAlert('error', 'การเข้าถึงถูกปฏิเสธ', 'เฉพาะผู้ดูแลระบบเท่านั้นที่เข้าถึงหน้านี้ได้');
+                setTimeout(() => window.location.href = 'login.html', 2000);
+                return false;
+            }
+            return true;
+        }
+
+        // Format address for display
+        function formatAddress(address) {
+            if (!address) return 'ยังไม่ได้ระบุ';
+            const { street, subdistrict, district, province, zipcode } = address;
+            return `${street ? street + ', ' : ''}ต.${subdistrict}, อ.${district}, จ.${province}, ${zipcode}`;
+        }
+
+        // Initialize charts
+        let salesChart, statusChart;
+
+        function initializeCharts(salesData, statusData) {
+            // Line Chart: Sales over time
+            salesChart = new Chart(document.getElementById('salesChart'), {
+                type: 'line',
+                data: {
+                    labels: salesData.labels,
+                    datasets: [{
+                        label: 'ยอดขาย (บาท)',
+                        data: salesData.values,
+                        borderColor: '#22c55e',
+                        backgroundColor: 'rgba(34, 197, 94, 0.2)',
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#15803d',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#15803d'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: true, position: 'top', labels: { font: { family: 'Prompt', size: 14 } } },
+                        tooltip: { backgroundColor: '#15803d', titleFont: { family: 'Prompt' }, bodyFont: { family: 'Prompt' } }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { family: 'Prompt' } } },
+                        y: { beginAtZero: true, grid: { color: 'rgba(0, 0, 0, 0.1)' }, ticks: { font: { family: 'Prompt' } } }
+                    },
+                    animation: { duration: 1000, easing: 'easeOutQuart' }
+                }
+            });
+
+            // Bar Chart: Users with/without purchases
+            statusChart = new Chart(document.getElementById('statusChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['ซื้อสินค้า', 'ไม่ซื้อสินค้า'],
+                    datasets: [{
+                        label: 'จำนวนผู้ใช้',
+                        data: [statusData.withPurchases, statusData.withoutPurchases],
+                        backgroundColor: ['#22c55e', '#ef4444'],
+                        borderColor: ['#15803d', '#dc2626'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: true, position: 'top', labels: { font: { family: 'Prompt', size: 14 } } },
+                        tooltip: { backgroundColor: '#15803d', titleFont: { family: 'Prompt' }, bodyFont: { family: 'Prompt' } }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { family: 'Prompt' } } },
+                        y: { beginAtZero: true, grid: { color: 'rgba(0, 0, 0, 0.1)' }, ticks: { font: { family: 'Prompt' } } }
+                    },
+                    animation: { duration: 1000, easing: 'easeOutQuart' }
+                }
+            });
+        }
+
+        // Load dashboard data
+        function loadDashboardData() {
+            if (!checkAdminAccess()) return;
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const nonAdminUsers = users.filter(u => !u.isAdmin);
+            const nonAdminPurchases = nonAdminUsers
+                .flatMap(user => (user.purchases || []).map(p => ({ ...p, email: user.email })))
+                .filter(p => p.paymentStatus !== 'cancelled'); // Exclude cancelled orders
+
+            // Update summary cards
+            document.getElementById('total-users').textContent = nonAdminUsers.length;
+            document.getElementById('total-sales').textContent = nonAdminPurchases.reduce((sum, p) => sum + (p.total || 0), 0).toLocaleString() + ' บาท';
+            document.getElementById('total-orders').textContent = nonAdminPurchases.length;
+            document.getElementById('pending-orders').textContent = nonAdminPurchases.filter(p => p.paymentStatus === 'pending').length;
+
+            // Prepare data for charts
+            const salesData = { labels: [], values: [] };
+            const statusData = { 
+                withPurchases: nonAdminUsers.filter(u => u.purchases && u.purchases.length > 0).length,
+                withoutPurchases: nonAdminUsers.filter(u => !u.purchases || u.purchases.length === 0).length
+            };
+
+            // Sales by date
+            const salesByDate = {};
+            nonAdminPurchases.forEach(purchase => {
+                const date = purchase.date.split('T')[0]; // Get YYYY-MM-DD
+                salesByDate[date] = (salesByDate[date] || 0) + purchase.total;
+            });
+            salesData.labels = Object.keys(salesByDate).sort();
+            salesData.values = salesData.labels.map(date => salesByDate[date]);
+
+            // Initialize or update charts
+            if (salesChart) salesChart.destroy();
+            if (statusChart) statusChart.destroy();
+            initializeCharts(salesData, statusData);
+
+            // Populate user table
+            const userTableBody = document.getElementById('user-table-body');
+            userTableBody.innerHTML = '';
+            nonAdminUsers.forEach((user, index) => {
+                const phones = user.phones?.join(', ') || 'ยังไม่ได้ระบุ';
+                const addresses = user.addresses?.map(formatAddress).join('<br>') || 'ยังไม่ได้ระบุ';
+                const row = document.createElement('tr');
+                row.className = 'animate-fadeInUp reveal';
+                row.style.animationDelay = `${index * 0.1}s`;
+                row.innerHTML = `
+                    <td>${user.name || 'ไม่ระบุ'} ${user.surname || ''}</td>
+                    <td>${user.email}</td>
+                    <td>${phones}</td>
+                    <td>${addresses}</td>
+                    <td><button class="action-btn" onclick="deleteUser('${user.email}')"><i class="fas fa-trash-alt"></i> ลบ</button></td>
+                `;
+                userTableBody.appendChild(row);
+            });
+
+            // Populate sales table
+            const salesTableBody = document.getElementById('sales-table-body');
+            salesTableBody.innerHTML = '';
+            nonAdminPurchases.forEach((purchase, index) => {
+                const row = document.createElement('tr');
+                row.className = 'animate-fadeInUp reveal';
+                row.style.animationDelay = `${index * 0.1}s`;
+                row.innerHTML = `
+                    <td>${purchase.id}</td>
+                    <td>${purchase.date}</td>
+                    <td>${purchase.email}</td>
+                    <td>${purchase.product}</td>
+                    <td>${purchase.quantity}</td>
+                    <td>${purchase.total.toLocaleString()} บาท</td>
+                    <td class="status-${purchase.paymentStatus}">${purchase.paymentStatus === 'paid' ? 'ชำระแล้ว' : purchase.paymentStatus === 'pending' ? 'รอชำระ' : 'ยกเลิก'}</td>
+                    <td>
+                        <select class="status-select" onchange="updatePaymentStatus('${purchase.email}', '${purchase.id}', this.value)">
+                            <option value="paid" ${purchase.paymentStatus === 'paid' ? 'selected' : ''}>ชำระแล้ว</option>
+                            <option value="pending" ${purchase.paymentStatus === 'pending' ? 'selected' : ''}>รอชำระ</option>
+                            <option value="cancelled" ${purchase.paymentStatus === 'cancelled' ? 'selected' : ''}>ยกเลิก</option>
+                        </select>
+                        <button class="action-btn" onclick="showPurchaseDetail(${index})">
+                            <i class="fas fa-eye"></i> ดูรายละเอียด
+                        </button>
+                    </td>
+                `;
+                salesTableBody.appendChild(row);
+            });
+        }
+
+        // Delete user
+        function deleteUser(email) {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.email === email);
+            if (user && user.isAdmin) {
+                showCustomAlert('error', 'ไม่สามารถลบ', 'ไม่สามารถลบผู้ดูแลระบบได้');
+                return;
+            }
+            const updatedUsers = users.filter(u => u.email !== email);
+            localStorage.setItem('users', JSON.stringify(updatedUsers));
+            showCustomAlert('success', 'ลบผู้ใช้สำเร็จ', `ผู้ใช้ ${email} ถูกลบเรียบร้อยแล้ว`);
+            loadDashboardData();
+        }
+
+        // Update payment status
+        function updatePaymentStatus(email, purchaseId, newStatus) {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const userIndex = users.findIndex(u => u.email === email);
+            if (userIndex !== -1) {
+                const purchase = users[userIndex].purchases.find(p => p.id === purchaseId);
+                if (purchase) {
+                    purchase.paymentStatus = newStatus;
+                    localStorage.setItem('users', JSON.stringify(users));
+                    showCustomAlert('success', 'อัปเดตสถานะสำเร็จ', `สถานะการชำระเงินของคำสั่งซื้อ ${purchaseId} อัปเดตเป็น ${newStatus === 'paid' ? 'ชำระแล้ว' : newStatus === 'pending' ? 'รอชำระ' : 'ยกเลิก'}`);
+                    loadDashboardData();
+                }
+            }
+        }
+
+        // Show purchase detail modal
+        function showPurchaseDetail(index) {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const nonAdminPurchases = users
+                .filter(u => !u.isAdmin)
+                .flatMap(user => (user.purchases || []).map(p => ({ ...p, email: user.email })))
+                .filter(p => p.paymentStatus !== 'cancelled');
+            const purchase = nonAdminPurchases[index];
+            if (!purchase) return;
+
+            const detailContent = document.getElementById('purchase-detail-content');
+            detailContent.innerHTML = `
+                <p><i class="fas fa-barcode"></i><strong>รหัสคำสั่งซื้อ:</strong> ${purchase.id}</p>
+                <p><i class="fas fa-calendar-alt"></i><strong>วันที่:</strong> ${purchase.date}</p>
+                <p><i class="fas fa-user"></i><strong>ผู้ซื้อ:</strong> ${purchase.email}</p>
+                <p><i class="fas fa-shopping-bag"></i><strong>สินค้า:</strong> ${purchase.product}</p>
+                <p><i class="fas fa-cubes"></i><strong>จำนวน:</strong> ${purchase.quantity}</p>
+                <p><i class="fas fa-wallet"></i><strong>ยอดรวม:</strong> ${purchase.total.toLocaleString()} บาท</p>
+                <p><i class="fas fa-money-check-alt"></i><strong>สถานะ:</strong> ${purchase.paymentStatus === 'paid' ? 'ชำระแล้ว' : purchase.paymentStatus === 'pending' ? 'รอชำระ' : 'ยกเลิก'}</p>
+            `;
+            document.getElementById('purchase-detail-overlay').classList.add('active');
+        }
+
+        // Close purchase detail modal
+        function closePurchaseDetail() {
+            document.getElementById('purchase-detail-overlay').classList.remove('active');
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('loggedInEmail');
+            showCustomAlert('success', 'ออกจากระบบสำเร็จ', 'คุณได้ออกจากระบบเรียบร้อยแล้ว');
+            setTimeout(() => window.location.href = 'login.html', 2000);
+        }
+
+        // Custom Alert Functions
+        function showCustomAlert(type, title, message) {
+            const overlay = document.getElementById('alert-overlay');
+            const alertBox = overlay.querySelector('.custom-alert');
+            const icon = document.getElementById('alert-icon');
+            const alertTitle = document.getElementById('alert-title');
+            const alertMessage = document.getElementById('alert-message');
+            const button = overlay.querySelector('button');
+
+            alertBox.classList.remove('success', 'error');
+            button.classList.remove('error');
+            if (type === 'success') {
+                alertBox.classList.add('success');
+                icon.className = 'fas fa-check-circle';
+            } else if (type === 'error') {
+                alertBox.classList.add('error');
+                icon.className = 'fas fa-exclamation-circle';
+                button.classList.add('error');
+            }
+            
+            alertTitle.textContent = title;
+            alertMessage.textContent = message;
+            overlay.classList.add('active');
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('alert-overlay').classList.remove('active');
+        }
+
+        // Scroll Animation
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            const reveals = document.querySelectorAll('.reveal');
+            for (let i = 0; i < reveals.length; i++) {
+                let windowHeight = window.innerHeight;
+                let elementTop = reveals[i].getBoundingClientRect().top;
+                let elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add('active');
+                } else {
+                    reveals[i].classList.remove('active');
+                }
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDashboardData();
+        });
+    </script>
+</body>
+</html>

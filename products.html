@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สินค้าทั้งหมด - OTOP ชุมชนบ้านนาเวียง</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/products.css">
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="/index.html" class="nav-logo-container animate-fadeIn"><img src="img/logo-main.png" alt="โลโก้ OTOP" class="nav-logo"></a>
+            <ul class="nav-links">
+                <li><a href="home.html" class="nav-link">หน้าแรก</a></li>
+                <li><a href="products.html" class="nav-link active">สินค้า</a></li>
+                <li><a href="about.html" class="nav-link">เกี่ยวกับชุมชน</a></li>
+                <li><a href="contact.html" class="nav-link">ติดต่อ</a></li>
+                <li><a href="account.html" class="nav-link ">บัญชี</a></li>
+                <li><a href="cart.html" class="nav-link"><i class="fas fa-shopping-cart"></i> ตะกร้าสินค้า</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="banner animate-fadeIn">
+            <div class="banner-content">
+                <h1>สินค้า OTOP ชุมชน</h1>
+                <p>ภูมิปัญญาท้องถิ่นจากบ้านนาเวียง ที่พร้อมส่งตรงถึงบ้านคุณ</p>
+            </div>
+        </section>
+
+        <section class="categories container">
+            <h2>สำรวจสินค้าตามหมวดหมู่</h2>
+            <div class="category-grid">
+                <a href="#handmade" class="category-card">
+                    <i class="fas fa-hammer"></i>
+                    <h4>งานหัตถกรรม</h4>
+                </a>
+                <a href="#food" class="category-card">
+                    <i class="fas fa-utensils"></i>
+                    <h4>อาหารแปรรูป</h4>
+                </a>
+                <a href="#herbal" class="category-card">
+                    <i class="fas fa-leaf"></i>
+                    <h4>ธรรมชาติ</h4>
+                </a>
+            </div>
+        </section>
+
+        <div class="container product-list-container">
+            <section id="handmade">
+                <h3 class="category-title">งานหัตถกรรม</h3>
+                <div class="product-grid">
+                    <div class="product-card">
+                        <img src="img/ตระกร้าหวาย.jpg" alt="ตะกร้าหวาย">
+                        <div class="sale-badge">ลดราคา!</div>
+                        <div class="product-card-content">
+                            <h3>ตะกร้าหวาย</h3>
+                            <div class="price-container">
+                                <span class="original-price">250 บาท</span>
+                                <span class="sale-price">200 บาท</span>
+                            </div>
+                            <div class="buttons">
+                                <button class="details-btn" onclick="showProductDetails('ตะกร้าหวาย', 200, 250, 'img/ตระกร้าหวาย.jpg', 'ทำด้วยมือทุกใบโดยช่างจักสานผู้ชำนาญในหมู่บ้าน เส้นหวายแท้คัดคุณภาพ สานแน่น ใช้ได้ทั้งใส่ของใช้ประจำวันหรือเป็นของตกแต่งบ้าน ให้ความรู้สึกใกล้ชิดธรรมชาติ และสะท้อนวิถีชีวิตเรียบง่ายของบ้านนาเวียง')"><i class="fas fa-info-circle"></i> ดูรายละเอียด</button>
+                                <button onclick="addToCart('ตะกร้าหวาย', 200, 'img/ตระกร้าหวาย.jpg', 1)"><i class="fas fa-cart-plus"></i> เพิ่มลงตะกร้า</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="img/เสื่อกก.jpg" alt="เสื่อกก">
+                        <div class="product-card-content">
+                            <h3>เสื่อกก</h3>
+                            <p class="sale-price">200 บาท</p>
+                            <div class="buttons">
+                                <button class="details-btn" onclick="showProductDetails('เสื่อกก', 200, null, 'img/เสื่อกก.jpg', 'เสื่อกกทุกผืนทอด้วยหัวใจโดยแม่บ้านในชุมชน เลือกลายดั้งเดิมผสมลายสมัยใหม่ ใช้กกจากทุ่งที่ปลูกเอง เนื้อแน่น นั่งนุ่ม เย็นสบาย เหมาะทั้งปูในบ้านหรือพกไปปิกนิก')"><i class="fas fa-info-circle"></i> ดูรายละเอียด</button>
+                                <button onclick="addToCart('เสื่อกก', 200, 'img/เสื่อกก.jpg', 1)"><i class="fas fa-cart-plus"></i> เพิ่มลงตะกร้า</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="food">
+                <h3 class="category-title">อาหารแปรรูป</h3>
+                <div class="product-grid">
+                    <div class="product-card">
+                        <img src="img/ข้าวหอม.jpg" alt="ข้าวหอมมะลิ">
+                        <div class="sale-badge">คุ้มค่า!</div>
+                        <div class="product-card-content">
+                            <h3>ข้าวหอมมะลิ</h3>
+                            <div class="price-container">
+                                <span class="original-price">200 บาท</span>
+                                <span class="sale-price">159 บาท</span>
+                            </div>
+                            <div class="buttons">
+                                <button class="details-btn" onclick="showProductDetails('ข้าวหอมมะลิ', 159, 200, 'img/ข้าวหอม.jpg', 'ปลูกในทุ่งนาที่อุดมสมบูรณ์ น้ำฝนจากภูเขา ลมหนาวพัดผ่านในฤดูเกี่ยว ทำให้เมล็ดข้าวยาว ขาวนวล มีกลิ่นหอมละมุนทุกครั้งที่หุง เป็นรสชาติของบ้านเกิดที่ไม่มีที่ไหนเหมือน')"><i class="fas fa-info-circle"></i> ดูรายละเอียด</button>
+                                <button onclick="addToCart('ข้าวหอมมะลิ', 159, 'img/ข้าวหอม.jpg', 1)"><i class="fas fa-cart-plus"></i> เพิ่มลงตะกร้า</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="img/ปลาร้า.jpg" alt="ปลาร้า">
+                        <div class="product-card-content">
+                            <h3>ปลาร้า</h3>
+                            <p class="sale-price">20 บาท/ถุง</p>
+                            <div class="buttons">
+                                <button class="details-btn" onclick="showProductDetails('ปลาร้า', 20, null, 'img/ปลาร้า.jpg', 'หมักจากปลาสด ๆ กับเกลือและข้าวคั่ว ตามสูตรดั้งเดิมที่สืบต่อมากว่า 30 ปี กลิ่นหอมเฉพาะตัว รสกลมกล่อม เป็นหัวใจของครัวอีสานที่ทำให้ทุกเมนูมีชีวิต')"><i class="fas fa-info-circle"></i> ดูรายละเอียด</button>
+                                <button onclick="addToCart('ปลาร้า', 20, 'img/ปลาร้า.jpg', 1)"><i class="fas fa-cart-plus"></i> เพิ่มลงตะกร้า</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="herbal">
+                <h3 class="category-title">ธรรมชาติ</h3>
+                <div class="product-grid">
+                    <div class="product-card">
+                        <img src="img/ยาหม่อง.jpg" alt="ยาหม่อง">
+                        <div class="sale-badge">ลด 10%</div>
+                        <div class="product-card-content">
+                            <h3>ยาหม่อง</h3>
+                            <div class="price-container">
+                                <span class="original-price">20 บาท</span>
+                                <span class="sale-price">18 บาท</span>
+                            </div>
+                            <div class="buttons">
+                                <button class="details-btn" onclick="showProductDetails('ยาหม่อง', 18, 20, 'img/ยาหม่อง.jpg', 'เกิดจากภูมิปัญญาชาวบ้านที่ถ่ายทอดกันมาหลายชั่วอายุคน ใช้สมุนไพรจากไร่และป่าในชุมชน เช่น ไพล ขมิ้น ตะไคร้หอม ผสมด้วยน้ำมันมะพร้าวสกัดเย็น หอมสดชื่น บรรเทาปวดเมื่อย เหมือนมีมือแม่คอยนวดให้หลังทำงานหนัก')"><i class="fas fa-info-circle"></i> ดูรายละเอียด</button>
+                                <button onclick="addToCart('ยาหม่อง', 18, 'img/ยาหม่อง.jpg', 1)"><i class="fas fa-cart-plus"></i> เพิ่มลงตะกร้า</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="img/ไม้กวาด.jpg" alt="ไม้กวาด">
+                        <div class="product-card-content">
+                            <h3>ไม้กวาด</h3>
+                            <p class="sale-price">300 บาท</p>
+                            <div class="buttons">
+                                <button class="details-btn" onclick="showProductDetails('ไม้กวาด', 300, null, 'img/ไม้กวาด.jpg', 'ผลิตจากดอกหญ้าเนื้อเหนียวในทุ่งบ้านนาเวียง คัดเฉพาะดอกอ่อน สีทองสวย ทนทาน กวาดสะอาดทุกซอกมุม เหมือนพลังของลมเย็นยามเช้าพัดผ่านบ้านไม้เก่า')"><i class="fas fa-info-circle"></i> ดูรายละเอียด</button>
+                                <button onclick="addToCart('ไม้กวาด', 300, 'img/ไม้กวาด.jpg', 1)"><i class="fas fa-cart-plus"></i> เพิ่มลงตะกร้า</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div class="details-overlay" id="details-overlay" onclick="closeProductDetails()">
+        <div class="details" id="details" onclick="event.stopPropagation()">
+            <div class="close-icon" onclick="closeProductDetails()"><i class="fas fa-times"></i></div>
+            <div class="details-main-content">
+                <div class="details-image">
+                    <img id="details-image" src="" alt="">
+                </div>
+                <div class="details-info">
+                    <h3 id="details-name"></h3>
+                    <div class="price-container">
+                        <span id="details-original-price" class="original-price"></span>
+                        <span id="details-price" class="sale-price"></span>
+                    </div>
+                    <p id="details-description" class="description"></p>
+                    <div class="details-quantity">
+                        <label for="quantity">จำนวน:</label>
+                        <input type="number" id="quantity" min="1" value="1">
+                    </div>
+                    <div class="details-buttons">
+                        <button id="details-add-to-cart" class="add-to-cart-btn"><i class="fas fa-cart-plus"></i> เพิ่มลงตะกร้า</button>
+                    </div>
+                </div>
+            </div>
+            <div class="related-products">
+                <h4>สินค้าแนะนำอื่นๆ</h4>
+                <div id="related-products-grid" class="related-products-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="custom-alert-overlay" id="alert-overlay" onclick="closeCustomAlert()">
+        <div class="custom-alert" onclick="event.stopPropagation()">
+            <div class="alert-content">
+                <i id="alert-icon" class="fas fa-check-circle"></i>
+                <h4 id="alert-title">สำเร็จ!</h4>
+                <p id="alert-message">ข้อความแจ้งเตือน</p>
+            </div>
+            <button onclick="closeCustomAlert()">ตกลง</button>
+        </div>
+    </div>
+
+    <footer id="contact">
+        <div class="footer-container">
+            <div class="footer-section reveal">
+                <h3>เกี่ยวกับร้าน OTOP ชุมชน</h3>
+                <p>เราคือร้านค้าที่นำเสนอผลิตภัณฑ์ OTOP คุณภาพสูงจากชุมชนบ้านนาเวียง สนับสนุนงานฝีมือท้องถิ่นและความยั่งยืน</p>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/frxme.kitisuk" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://line.me/ti/p/MLQ2KzX_hh" class="social-icon"><i class="fab fa-line"></i></a>
+                    <a href="https://www.instagram.com/f4x_me/" class="social-icon"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-section reveal">
+                <h3>ลิงก์ด่วน</h3>
+                <ul class="footer-links">
+                    <li><a href="home.html" class="footer-link">หน้าแรก</a></li>
+                    <li><a href="products.html" class="footer-link">สินค้า</a></li>
+                    <li><a href="about.html" class="footer-link">เกี่ยวกับชุมชน</a></li>
+                    <li><a href="contact.html" class="footer-link">ติดต่อ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section reveal">
+                <h3>ติดต่อเรา</h3>
+                <p><i class="fas fa-envelope"></i> อีเมล: piyasanw@gmail.com</p>
+                <p><i class="fas fa-phone-alt"></i> โทร: 06-23892553</p>
+                <p><i class="fas fa-map-marker-alt"></i> ที่อยู่: หมู่ 1 ต.นาเวียง อ.เสนางคนิคม จ.อำนาจเจริญ 37290</p>
+            </div>
+        </div>
+        <div class="footer-credit reveal">
+            <p>© 2025 ร้าน OTOP ชุมชนบ้านนาเวียง. สงวนลิขสิทธิ์.</p>
+        </div>
+    </footer>
+
+
+    <script>
+        // Product Data
+        const allProducts = [
+            { name: 'ตะกร้าหวาย', price: 200, originalPrice: 250, image: 'img/ตระกร้าหวาย.jpg', description: 'ทำด้วยมือทุกใบโดยช่างจักสานผู้ชำนาญในหมู่บ้าน เส้นหวายแท้คัดคุณภาพ สานแน่น ใช้ได้ทั้งใส่ของใช้ประจำวันหรือเป็นของตกแต่งบ้าน ให้ความรู้สึกใกล้ชิดธรรมชาติ และสะท้อนวิถีชีวิตเรียบง่ายของบ้านนาเวียง' },
+            { name: 'ไม้กวาด', price: 300, originalPrice: null, image: 'img/ไม้กวาด.jpg', description: 'ผลิตจากดอกหญ้าเนื้อเหนียวในทุ่งบ้านนาเวียง คัดเฉพาะดอกอ่อน สีทองสวย ทนทาน กวาดสะอาดทุกซอกมุม เหเหมือนพลังของลมเย็นยามเช้าพัดผ่านบ้านไม้เก่า' },
+            { name: 'ยาหม่อง', price: 18, originalPrice: 20, image: 'img/ยาหม่อง.jpg', description: 'เกิดจากภูมิปัญญาชาวบ้านที่ถ่ายทอดกันมาหลายชั่วอายุคน ใช้สมุนไพรจากไร่และป่าในชุมชน เช่น ไพล ขมิ้น ตะไคร้หอม ผสมด้วยน้ำมันมะพร้าวสกัดเย็น หอมสดชื่น บรรเทาปวดเมื่อย เหมือนมีมือแม่คอยนวดให้หลังทำงานหนัก' },
+            { name: 'ปลาร้า', price: 20, originalPrice: null, image: 'img/ปลาร้า.jpg', description: 'หมักจากปลาสด ๆ กับเกลือและข้าวคั่ว ตามสูตรดั้งเดิมที่สืบต่อมากว่า 30 ปี กลิ่นหอมเฉพาะตัว รสกลมกล่อม เป็นหัวใจของครัวอีสานที่ทำให้ทุกเมนูมีชีวิต' },
+            { name: 'ข้าวหอมมะลิ', price: 159, originalPrice: 200, image: 'img/ข้าวหอม.jpg', description: 'ปลูกในทุ่งนาที่อุดมสมบูรณ์ น้ำฝนจากภูเขา ลมหนาวพัดผ่านในฤดูเกี่ยว ทำให้เมล็ดข้าวยาว ขาวนวล มีกลิ่นหอมละมุนทุกครั้งที่หุง เป็นรสชาติของบ้านเกิดที่ไม่มีที่ไหนเหมือน' },
+            { name: 'เสื่อกก', price: 200, originalPrice: null, image: 'img/เสื่อกก.jpg', description: 'เสื่อกกทุกผืนทอด้วยหัวใจโดยแม่บ้านในชุมชน เลือกลายดั้งเดิมผสมลายสมัยใหม่ ใช้กกจากทุ่งที่ปลูกเอง เนื้อแน่น นั่งนุ่ม เย็นสบาย เหมาะทั้งปูในบ้านหรือพกไปปิกนิก' },
+        ];
+
+        // Cart Management
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); }
+
+        function addToCart(name, price, image, quantity) {
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) existingItem.quantity += quantity;
+            else cart.push({ name, price, image, quantity });
+            saveCart();
+            showCustomAlert('success', 'เพิ่มสินค้าลงในตะกร้าแล้ว!', 'สินค้าของคุณถูกเพิ่มลงในตะกร้าเรียบร้อยแล้วค่ะ');
+            window.location.href = 'cart.html';
+        }
+
+        // UI Interactions
+        function showProductDetails(name, price, originalPrice, image, description) {
+            document.getElementById('details-image').src = image || 'img/placeholder.jpg';
+            document.getElementById('details-image').alt = name;
+            document.getElementById('details-name').textContent = name;
+            document.getElementById('details-price').textContent = `${price} บาท`;
+            
+            const originalPriceElement = document.getElementById('details-original-price');
+            if (originalPrice) {
+                originalPriceElement.textContent = `${originalPrice} บาท`;
+                originalPriceElement.style.display = 'block';
+            } else {
+                originalPriceElement.style.display = 'none';
+            }
+
+            document.getElementById('details-description').textContent = description;
+            document.getElementById('quantity').value = 1;
+
+            const addToCartBtn = document.getElementById('details-add-to-cart');
+            addToCartBtn.onclick = () => {
+                const quantity = parseInt(document.getElementById('quantity').value) || 1;
+                addToCart(name, price, image, quantity);
+                closeProductDetails();
+            };
+
+            renderRelatedProducts(name);
+
+            document.getElementById('details-overlay').classList.add('active');
+        }
+
+        function closeProductDetails() {
+            document.getElementById('details-overlay').classList.remove('active');
+        }
+
+        // Custom Alert Functions
+        function showCustomAlert(type, title, message) {
+            const overlay = document.getElementById('alert-overlay');
+            const alertBox = overlay.querySelector('.custom-alert');
+            const icon = document.getElementById('alert-icon');
+            const alertTitle = document.getElementById('alert-title');
+            const alertMessage = document.getElementById('alert-message');
+            const button = overlay.querySelector('button');
+
+            alertBox.classList.remove('success', 'error', 'info');
+            button.classList.remove('error', 'info');
+
+            if (type === 'success') {
+                alertBox.classList.add('success');
+                icon.className = 'fas fa-check-circle';
+                button.style.backgroundColor = '#10b981';
+            } else if (type === 'error') {
+                alertBox.classList.add('error');
+                icon.className = 'fas fa-exclamation-circle';
+                button.style.backgroundColor = '#ef4444';
+            } else if (type === 'info') {
+                alertBox.classList.add('info');
+                icon.className = 'fas fa-info-circle';
+                button.style.backgroundColor = '#facc15';
+            }
+            
+            alertTitle.textContent = title;
+            alertMessage.textContent = message;
+
+            overlay.classList.add('active');
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('alert-overlay').classList.remove('active');
+        }
+
+        // Function to render related products
+        function renderRelatedProducts(currentProductName) {
+            const relatedProductsContainer = document.getElementById('related-products-grid');
+            relatedProductsContainer.innerHTML = '';
+            
+            const otherProducts = allProducts.filter(p => p.name !== currentProductName);
+            const shuffledProducts = otherProducts.sort(() => 0.5 - Math.random());
+            const relatedProducts = shuffledProducts.slice(0, 3);
+
+            relatedProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'related-product-card';
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" onclick="showProductDetails('${product.name}', ${product.price}, ${product.originalPrice}, '${product.image}', '${product.description}')">
+                    <p>${product.name}</p>
+                    <p class="price">${product.price} บาท</p>
+                `;
+                relatedProductsContainer.appendChild(productCard);
+            });
+        }
+
+        // Event Listeners
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>ล็อกอิน - OTOP ชุมชนบ้านนาเวียง</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.css">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+   <div class="login container grid" id="loginAccessRegister">
+      <!-- ล็อกอิน -->
+      <div class="login__access">
+         <h1 class="login__title">เข้าสู่ระบบ OTOP ชุมชนบ้านนาเวียง</h1>
+         <p class="login__subtitle">สนับสนุนผลิตภัณฑ์งานฝีมือท้องถิ่นจากชุมชนของเรา</p>
+         <div class="login__area">
+            <form id="loginForm" class="login__form">
+               <div class="login__content grid">
+                  <div class="login__box">
+                     <input type="email" id="email" required placeholder=" " class="login__input">
+                     <label for="email" class="login__label">อีเมล</label>
+                     <i class="ri-mail-fill login__icon"></i>
+                  </div>
+                  <div class="login__box">
+                     <input type="password" id="password" required placeholder=" " class="login__input">
+                     <label for="password" class="login__label">รหัสผ่าน</label>
+                     <i class="ri-eye-off-fill login__icon login__password" id="loginPassword"></i>
+                  </div>
+               </div>
+               <p id="loginError" class="error-message"></p>
+               <a href="#" class="login__forgot">ลืมรหัสผ่าน?</a>
+               <button type="submit" class="login__button">เข้าสู่ระบบ</button>
+            </form>
+            <div class="login__social">
+               <p class="login__social-title">หรือ เข้าสู่ระบบด้วย</p>
+               <div class="login__social-links">
+                  <a href="#" class="login__social-link">
+                     <img src="img/icon-google.svg" alt="Google" class="login__social-img">
+                  </a>
+                  <a href="#" class="login__social-link">
+                     <img src="img/icon-facebook.svg" alt="Facebook" class="login__social-img">
+                  </a>
+                  <a href="#" class="login__social-link">
+                     <img src="img/icon-apple.svg" alt="Apple" class="login__social-img">
+                  </a>
+               </div>
+            </div>
+            <p class="login__switch">
+               ไม่มีบัญชี? 
+               <button id="loginButtonRegister">สร้างบัญชี</button>
+            </p>
+         </div>
+      </div>
+
+      <!-- สมัครสมาชิก -->
+      <div class="login__register">
+         <h1 class="login__title">สร้างบัญชี OTOP ชุมชนบ้านนาเวียง</h1>
+         <p class="login__subtitle">เข้าร่วมชุมชนเพื่อสนับสนุนผลิตภัณฑ์ OTOP คุณภาพ</p>
+         <div class="login__area">
+            <form id="registerForm" class="login__form">
+               <div class="login__content grid">
+                  <div class="login__group grid">
+                     <div class="login__box">
+                        <input type="text" id="names" required placeholder=" " class="login__input">
+                        <label for="names" class="login__label">ชื่อ</label>
+                        <i class="ri-id-card-fill login__icon"></i>
+                     </div>
+                     <div class="login__box">
+                        <input type="text" id="surnames" required placeholder=" " class="login__input">
+                        <label for="surnames" class="login__label">นามสกุล</label>
+                        <i class="ri-id-card-fill login__icon"></i>
+                     </div>
+                  </div>
+                  <div class="login__box">
+                     <input type="email" id="emailCreate" required placeholder=" " class="login__input">
+                     <label for="emailCreate" class="login__label">อีเมล</label>
+                     <i class="ri-mail-fill login__icon"></i>
+                  </div>
+                  <div class="login__box">
+                     <input type="password" id="passwordCreate" required placeholder=" " class="login__input">
+                     <label for="passwordCreate" class="login__label">รหัสผ่าน</label>
+                     <i class="ri-eye-off-fill login__icon login__password" id="loginPasswordCreate"></i>
+                  </div>
+               </div>
+               <p id="registerError" class="error-message"></p>
+               <button type="submit" class="login__button">สร้างบัญชี</button>
+            </form>
+            <p class="login__switch">
+               มีบัญชีอยู่แล้ว? 
+               <button id="loginButtonAccess">เข้าสู่ระบบ</button>
+            </p>
+         </div>
+      </div>
+   </div>
+
+   <div class="custom-alert-overlay" id="alert-overlay" onclick="closeCustomAlert()">
+      <div class="custom-alert" onclick="event.stopPropagation()">
+         <div class="alert-content">
+            <i id="alert-icon" class="fas fa-check-circle"></i>
+            <h4 id="alert-title">สำเร็จ!</h4>
+            <p id="alert-message">ข้อความแจ้งเตือน</p>
+         </div>
+         <button onclick="closeCustomAlert()">ตกลง</button>
+      </div>
+   </div>
+
+   <script>
+      // Toggle password visibility (Login)
+      const passwordAccess = (loginPass, loginEye) => {
+         const input = document.getElementById(loginPass),
+               iconEye = document.getElementById(loginEye);
+         iconEye.addEventListener('click', () => {
+            input.type = input.type === 'password' ? 'text' : 'password';
+            iconEye.classList.toggle('ri-eye-fill');
+            iconEye.classList.toggle('ri-eye-off-fill');
+         });
+      };
+      passwordAccess('password', 'loginPassword');
+
+      // Toggle password visibility (Register)
+      const passwordRegister = (loginPass, loginEye) => {
+         const input = document.getElementById(loginPass),
+               iconEye = document.getElementById(loginEye);
+         iconEye.addEventListener('click', () => {
+            input.type = input.type === 'password' ? 'text' : 'password';
+            iconEye.classList.toggle('ri-eye-fill');
+            iconEye.classList.toggle('ri-eye-off-fill');
+         });
+      };
+      passwordRegister('passwordCreate', 'loginPasswordCreate');
+
+      // Toggle between login and register forms
+      const loginAcessRegister = document.getElementById('loginAccessRegister'),
+            buttonRegister = document.getElementById('loginButtonRegister'),
+            buttonAccess = document.getElementById('loginButtonAccess');
+      buttonRegister.addEventListener('click', () => {
+         loginAcessRegister.classList.add('active');
+      });
+      buttonAccess.addEventListener('click', () => {
+         loginAcessRegister.classList.remove('active');
+      });
+
+      // Custom Alert Functions
+      function showCustomAlert(type, title, message, redirect = null) {
+         const overlay = document.getElementById('alert-overlay');
+         const alertBox = overlay.querySelector('.custom-alert');
+         const icon = document.getElementById('alert-icon');
+         const alertTitle = document.getElementById('alert-title');
+         const alertMessage = document.getElementById('alert-message');
+         const button = overlay.querySelector('button');
+
+         alertBox.classList.remove('success', 'error');
+         button.classList.remove('error');
+         if (type === 'success') {
+            alertBox.classList.add('success');
+            icon.className = 'fas fa-check-circle';
+         } else if (type === 'error') {
+            alertBox.classList.add('error');
+            icon.className = 'fas fa-exclamation-circle';
+            button.classList.add('error');
+         }
+         
+         alertTitle.textContent = title;
+         alertMessage.textContent = message;
+         overlay.classList.add('active');
+
+         if (redirect) {
+            button.onclick = () => {
+               closeCustomAlert();
+               window.location.href = redirect;
+            };
+         } else {
+            button.onclick = closeCustomAlert;
+         }
+      }
+
+      function closeCustomAlert() {
+         document.getElementById('alert-overlay').classList.remove('active');
+      }
+
+      // Login form submission
+      document.getElementById('loginForm').addEventListener('submit', (e) => {
+         e.preventDefault();
+         const email = document.getElementById('email').value;
+         const password = document.getElementById('password').value;
+         const errorElement = document.getElementById('loginError');
+
+         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            errorElement.textContent = 'กรุณากรอกอีเมลที่ถูกต้อง';
+            return;
+         }
+
+         const users = JSON.parse(localStorage.getItem('users')) || [];
+         const user = users.find(u => u.email === email && u.password === password);
+
+         if (user) {
+            localStorage.setItem('loggedInEmail', email);
+            const redirectPage = user.isAdmin ? 'admin.html' : 'home.html';
+            showCustomAlert('success', 'เข้าสู่ระบบสำเร็จ!', `ยินดีต้อนรับ ${user.name}`, redirectPage);
+         } else {
+            errorElement.textContent = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
+         }
+      });
+
+      // Register form submission
+      document.getElementById('registerForm').addEventListener('submit', (e) => {
+         e.preventDefault();
+         const name = document.getElementById('names').value;
+         const surname = document.getElementById('surnames').value;
+         const email = document.getElementById('emailCreate').value;
+         const password = document.getElementById('passwordCreate').value;
+         const errorElement = document.getElementById('registerError');
+
+         if (!name || !surname) {
+            errorElement.textContent = 'กรุณากรอกชื่อและนามสกุล';
+            return;
+         }
+         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            errorElement.textContent = 'กรุณากรอกอีเมลที่ถูกต้อง';
+            return;
+         }
+         if (password.length < 6) {
+            errorElement.textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';
+            return;
+         }
+
+         const users = JSON.parse(localStorage.getItem('users')) || [];
+         if (users.some(u => u.email === email)) {
+            errorElement.textContent = 'อีเมลนี้มีผู้ใช้งานแล้ว';
+            return;
+         }
+
+         const isAdmin = email === 'admin@gmail.com'; // ตั้งค่า isAdmin สำหรับ admin@example.com
+         users.push({ 
+            name, 
+            surname, 
+            email, 
+            password, 
+            addresses: [], 
+            phones: [], 
+            purchases: [], 
+            isAdmin 
+         });
+         localStorage.setItem('users', JSON.stringify(users));
+         showCustomAlert('success', 'สร้างบัญชีสำเร็จ!', 'กรุณาเข้าสู่ระบบ');
+         loginAcessRegister.classList.remove('active');
+         document.getElementById('registerForm').reset();
+      });
+
+      // Initialize page
+      document.addEventListener('DOMContentLoaded', () => {
+         const reveals = document.querySelectorAll('.reveal');
+         reveals.forEach((reveal, index) => {
+            reveal.style.animationDelay = `${index * 0.1}s`;
+            reveal.classList.add('active');
+         });
+      });
+   </script>
+</body>
+</html>

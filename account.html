@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>บัญชีของฉัน - OTOP ชุมชนบ้านนาเวียง</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/account.css">
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="/index.html" class="nav-logo-container animate-fadeIn"><img src="img/logo-main.png" alt="โลโก้ OTOP" class="nav-logo"></a>
+            <ul class="nav-links">
+                <li><a href="home.html" class="nav-link">หน้าแรก</a></li>
+                <li><a href="products.html" class="nav-link">สินค้า</a></li>
+                <li><a href="about.html" class="nav-link">เกี่ยวกับชุมชน</a></li>
+                <li><a href="contact.html" class="nav-link">ติดต่อ</a></li>
+                <li><a href="account.html" class="nav-link active">บัญชี</a></li>
+                <li><a href="cart.html" class="nav-link"><i class="fas fa-shopping-cart"></i> ตะกร้าสินค้า</a></li>
+            </ul>
+            <button class="logout-btn" onclick="logout()">ออกจากระบบ</button>
+        </div>
+    </nav>
+
+    <main>
+        <div class="account-container">
+            <div class="account-header reveal">
+                <h1>บัญชีของฉัน</h1>
+                <p>จัดการข้อมูลส่วนตัว รูปโปรไฟล์ ที่อยู่ เบอร์โทรศัพท์ และประวัติการซื้อของ</p>
+            </div>
+            <div class="account-info reveal">
+                <div class="profile-picture-container">
+                    <img id="profile-picture" class="profile-picture" src="" alt="รูปโปรไฟล์" style="display: none;">
+                    <div id="profile-picture-placeholder" class="profile-picture-placeholder">ไม่มีรูปโปรไฟล์</div>
+                    <input type="file" id="profile-picture-input" accept="image/jpeg,image/png" style="display: none;">
+                    <button class="profile-picture-upload" id="profile-picture-upload" onclick="document.getElementById('profile-picture-input').click()">อัปโหลดรูปโปรไฟล์</button>
+                </div>
+                <div class="user-details">
+                    <h3>ข้อมูลผู้ใช้</h3>
+                    <p><i class="fas fa-user"></i><strong>ชื่อ:</strong> <span id="user-name">กำลังโหลด...</span></p>
+                    <p><i class="fas fa-user"></i><strong>นามสกุล:</strong> <span id="user-surname">กำลังโหลด...</span></p>
+                    <p><i class="fas fa-envelope"></i><strong>อีเมล:</strong> <span id="user-email">กำลังโหลด...</span></p>
+                    <p><i class="fas fa-phone"></i><strong>เบอร์โทรศัพท์:</strong></p>
+                    <div class="form-group">
+                        <select id="user-phone" onchange="updatePhoneInput()">
+                            <option value="">เลือกหรือเพิ่มเบอร์โทรศัพท์</option>
+                        </select>
+                        <input type="tel" id="new-phone" placeholder="เพิ่มเบอร์ใหม่ (10 หลัก)" pattern="[0-9]{10}">
+                        <button onclick="addPhone()" class="add-address-btn">เพิ่มเบอร์</button>
+                    </div>
+                </div>
+            </div>
+            <div class="address-section reveal">
+                <h3>ที่อยู่</h3>
+                <div class="address-list" id="address-list"></div>
+                <button class="add-address-btn" onclick="showAddressForm()">เพิ่มที่อยู่ใหม่</button>
+            </div>
+            <div class="account-form reveal" id="address-form-container" style="display: none;">
+                <h3>เพิ่ม/แก้ไขที่อยู่</h3>
+                <form id="address-form">
+                    <div class="form-group">
+                        <label for="street">บ้านเลขที่/หมู่/ถนน</label>
+                        <input type="text" id="street" placeholder="เช่น บ้านเลขที่ 123 หมู่ 4 ถนนหลัก" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="province">จังหวัด</label>
+                            <select id="province" required>
+                                <option value="">เลือกจังหวัด</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="district">อำเภอ</label>
+                            <select id="district" required disabled>
+                                <option value="">เลือกอำเภอ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="subdistrict">ตำบล</label>
+                            <select id="subdistrict" required disabled>
+                                <option value="">เลือกตำบล</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="zipcode">รหัสไปรษณีย์</label>
+                            <input type="text" id="zipcode" readonly>
+                        </div>
+                    </div>
+                    <button type="submit">บันทึกที่อยู่</button>
+                </form>
+            </div>
+            <div class="purchase-history reveal" id="purchase-history">
+                <h3>ประวัติการซื้อ</h3>
+                <div id="purchase-list"></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="custom-alert-overlay" id="alert-overlay" onclick="closeCustomAlert()">
+        <div class="custom-alert" onclick="event.stopPropagation()">
+            <div class="alert-content">
+                <i id="alert-icon" class="fas fa-check-circle"></i>
+                <h4 id="alert-title">สำเร็จ!</h4>
+                <p id="alert-message">ข้อความแจ้งเตือน</p>
+            </div>
+            <button onclick="closeCustomAlert()">ตกลง</button>
+        </div>
+    </div>
+
+    <div class="purchase-detail-overlay" id="purchase-detail-overlay" onclick="closePurchaseDetail()">
+        <div class="purchase-detail-modal" onclick="event.stopPropagation()">
+            <h4>รายละเอียดคำสั่งซื้อ</h4>
+            <div id="purchase-detail-content"></div>
+            <button onclick="closePurchaseDetail()">ปิด</button>
+        </div>
+    </div>
+
+     <footer id="contact">
+        <div class="footer-container">
+            <div class="footer-section reveal">
+                <h3>เกี่ยวกับร้าน OTOP ชุมชน</h3>
+                <p>เราคือร้านค้าที่นำเสนอผลิตภัณฑ์ OTOP คุณภาพสูงจากชุมชนบ้านนาเวียง สนับสนุนงานฝีมือท้องถิ่นและความยั่งยืน</p>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/frxme.kitisuk" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://line.me/ti/p/MLQ2KzX_hh" class="social-icon"><i class="fab fa-line"></i></a>
+                    <a href="https://www.instagram.com/f4x_me/" class="social-icon"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-section reveal">
+                <h3>ลิงก์ด่วน</h3>
+                <ul class="footer-links">
+                    <li><a href="home.html" class="footer-link">หน้าแรก</a></li>
+                    <li><a href="products.html" class="footer-link">สินค้า</a></li>
+                    <li><a href="about.html" class="footer-link">เกี่ยวกับชุมชน</a></li>
+                    <li><a href="contact.html" class="footer-link">ติดต่อ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section reveal">
+                <h3>ติดต่อเรา</h3>
+                <p><i class="fas fa-envelope"></i> อีเมล: piyasanw@gmail.com</p>
+                <p><i class="fas fa-phone-alt"></i> โทร: 06-23892553</p>
+                <p><i class="fas fa-map-marker-alt"></i> ที่อยู่: หมู่ 1 ต.นาเวียง อ.เสนางคนิคม จ.อำนาจเจริญ 37290</p>
+            </div>
+        </div>
+        <div class="footer-credit reveal">
+            <p>© 2025 ร้าน OTOP ชุมชนบ้านนาเวียง. สงวนลิขสิทธิ์.</p>
+        </div>
+    </footer>
+
+
+    <script>
+        // Fetch address data from API
+        async function fetchAddressData() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/thailand-geography-data/thailand-geography-json/main/src/geography.json');
+                if (!response.ok) throw new Error('ไม่สามารถดึงข้อมูลที่อยู่ได้');
+                const data = await response.json();
+                const provinces = {};
+                data.forEach(item => {
+                    if (!provinces[item.provinceNameTh]) {
+                        provinces[item.provinceNameTh] = { districts: {} };
+                    }
+                    if (!provinces[item.provinceNameTh].districts[item.districtNameTh]) {
+                        provinces[item.provinceNameTh].districts[item.districtNameTh] = { subdistricts: [] };
+                    }
+                    provinces[item.provinceNameTh].districts[item.districtNameTh].subdistricts.push({
+                        name: item.subdistrictNameTh,
+                        zipcode: item.postalCode
+                    });
+                });
+                return { provinces: Object.keys(provinces).map(name => ({
+                    name,
+                    districts: Object.keys(provinces[name].districts).map(districtName => ({
+                        name: districtName,
+                        subdistricts: provinces[name].districts[districtName].subdistricts
+                    }))
+                }))};
+            } catch (error) {
+                showCustomAlert('error', 'ข้อผิดพลาด', 'ไม่สามารถดึงข้อมูลที่อยู่จาก API ได้ กรุณาลองใหม่ภายหลัง');
+                return { provinces: [] };
+            }
+        }
+
+        // Populate province dropdown
+        async function populateProvinces() {
+            const addressData = await fetchAddressData();
+            const provinceSelect = document.getElementById('province');
+            provinceSelect.innerHTML = '<option value="">เลือกจังหวัด</option>';
+            addressData.provinces.sort((a, b) => a.name.localeCompare(b.name, 'th')).forEach(province => {
+                const option = document.createElement('option');
+                option.value = province.name;
+                option.textContent = province.name;
+                provinceSelect.appendChild(option);
+            });
+        }
+
+        // Populate district dropdown based on province
+        async function populateDistricts(province) {
+            const addressData = await fetchAddressData();
+            const districtSelect = document.getElementById('district');
+            const subdistrictSelect = document.getElementById('subdistrict');
+            const zipcodeInput = document.getElementById('zipcode');
+            districtSelect.innerHTML = '<option value="">เลือกอำเภอ</option>';
+            subdistrictSelect.innerHTML = '<option value="">เลือกตำบล</option>';
+            districtSelect.disabled = true;
+            subdistrictSelect.disabled = true;
+            zipcodeInput.value = '';
+
+            if (province) {
+                const selectedProvince = addressData.provinces.find(p => p.name === province);
+                if (selectedProvince) {
+                    districtSelect.disabled = false;
+                    selectedProvince.districts.sort((a, b) => a.name.localeCompare(b.name, 'th')).forEach(district => {
+                        const option = document.createElement('option');
+                        option.value = district.name;
+                        option.textContent = district.name;
+                        districtSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        // Populate subdistrict dropdown based on district
+        async function populateSubdistricts(province, district) {
+            const addressData = await fetchAddressData();
+            const subdistrictSelect = document.getElementById('subdistrict');
+            const zipcodeInput = document.getElementById('zipcode');
+            subdistrictSelect.innerHTML = '<option value="">เลือกตำบล</option>';
+            subdistrictSelect.disabled = true;
+            zipcodeInput.value = '';
+
+            if (province && district) {
+                const selectedProvince = addressData.provinces.find(p => p.name === province);
+                const selectedDistrict = selectedProvince?.districts.find(d => d.name === district);
+                if (selectedDistrict) {
+                    subdistrictSelect.disabled = false;
+                    selectedDistrict.subdistricts.sort((a, b) => a.name.localeCompare(b.name, 'th')).forEach(subdistrict => {
+                        const option = document.createElement('option');
+                        option.value = subdistrict.name;
+                        option.textContent = subdistrict.name;
+                        option.dataset.zipcode = subdistrict.zipcode;
+                        subdistrictSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        // Format address for display
+        function formatAddress(address) {
+            if (!address) return 'ยังไม่ได้ระบุ';
+            const { street, subdistrict, district, province, zipcode } = address;
+            return `${street ? street + ', ' : ''}ต.${subdistrict}, อ.${district}, จ.${province}, ${zipcode}`;
+        }
+
+        // Load user data from localStorage
+        async function loadUserData() {
+            const loggedInEmail = localStorage.getItem('loggedInEmail');
+            if (!loggedInEmail) {
+                showCustomAlert('error', 'กรุณาล็อกอิน', 'คุณต้องล็อกอินก่อนเข้าถึงหน้านี้');
+                setTimeout(() => window.location.href = 'login.html', 2000);
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.email === loggedInEmail);
+            if (user) {
+                document.getElementById('user-name').textContent = user.name || 'ไม่ระบุ';
+                document.getElementById('user-surname').textContent = user.surname || 'ไม่ระบุ';
+                document.getElementById('user-email').textContent = user.email || 'ไม่ระบุ';
+                populatePhones(user.phones || []);
+                populateAddresses(user.addresses || []);
+                populatePurchaseHistory(user.purchases || []);
+                if (user.profilePicture) {
+                    const profilePicture = document.getElementById('profile-picture');
+                    profilePicture.src = user.profilePicture;
+                    profilePicture.style.display = 'block';
+                    document.getElementById('profile-picture-placeholder').style.display = 'none';
+                }
+            } else {
+                showCustomAlert('error', 'ไม่พบข้อมูลผู้ใช้', 'กรุณาล็อกอินก่อนเข้าถึงหน้านี้');
+                setTimeout(() => window.location.href = 'login.html', 2000);
+            }
+        }
+
+        // Handle profile picture upload
+        document.getElementById('profile-picture-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            const uploadButton = document.getElementById('profile-picture-upload');
+            if (!file) return;
+
+            const validTypes = ['image/jpeg', 'image/png'];
+            if (!validTypes.includes(file.type)) {
+                showCustomAlert('error', 'ไฟล์ไม่ถูกต้อง', 'กรุณาอัปโหลดไฟล์รูปภาพประเภท JPG หรือ PNG เท่านั้น');
+                return;
+            }
+
+            if (file.size > 2 * 1024 * 1024) {
+                showCustomAlert('error', 'ไฟล์ใหญ่เกินไป', 'ขนาดไฟล์ต้องไม่เกิน 2MB');
+                return;
+            }
+
+            uploadButton.classList.add('uploading');
+            uploadButton.disabled = true;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const loggedInEmail = localStorage.getItem('loggedInEmail');
+                const userIndex = users.findIndex(u => u.email === loggedInEmail);
+                if (userIndex !== -1) {
+                    users[userIndex].profilePicture = event.target.result;
+                    localStorage.setItem('users', JSON.stringify(users));
+                    const profilePicture = document.getElementById('profile-picture');
+                    profilePicture.src = event.target.result;
+                    profilePicture.style.display = 'block';
+                    document.getElementById('profile-picture-placeholder').style.display = 'none';
+                    showCustomAlert('success', 'อัปโหลดสำเร็จ!', 'รูปโปรไฟล์ของคุณได้รับการอัปเดตเรียบร้อยแล้ว');
+                }
+                uploadButton.classList.remove('uploading');
+                uploadButton.disabled = false;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Populate phone dropdown
+        function populatePhones(phones) {
+            const phoneSelect = document.getElementById('user-phone');
+            phoneSelect.innerHTML = '<option value="">เลือกหรือเพิ่มเบอร์โทรศัพท์</option>';
+            phones.forEach(phone => {
+                const option = document.createElement('option');
+                option.value = phone;
+                option.textContent = phone;
+                phoneSelect.appendChild(option);
+            });
+        }
+
+        // Update phone input field when selecting from dropdown
+        function updatePhoneInput() {
+            const phoneSelect = document.getElementById('user-phone');
+            const newPhoneInput = document.getElementById('new-phone');
+            if (phoneSelect.value) {
+                newPhoneInput.value = phoneSelect.value;
+            }
+        }
+
+        // Add new phone
+        function addPhone() {
+            const newPhone = document.getElementById('new-phone').value;
+            if (!/^[0-9]{10}$/.test(newPhone)) {
+                showCustomAlert('error', 'เบอร์โทรศัพท์ไม่ถูกต้อง', 'กรุณากรอกเบอร์โทรศัพท์ 10 หลัก');
+                return;
+            }
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const loggedInEmail = localStorage.getItem('loggedInEmail');
+            const userIndex = users.findIndex(u => u.email === loggedInEmail);
+            if (userIndex !== -1) {
+                const phones = users[userIndex].phones || [];
+                if (!phones.includes(newPhone)) {
+                    phones.push(newPhone);
+                    users[userIndex].phones = phones;
+                    localStorage.setItem('users', JSON.stringify(users));
+                    populatePhones(phones);
+                    document.getElementById('new-phone').value = '';
+                    showCustomAlert('success', 'เพิ่มเบอร์สำเร็จ!', 'เบอร์โทรศัพท์ถูกเพิ่มเรียบร้อยแล้ว');
+                } else {
+                    showCustomAlert('error', 'เบอร์ซ้ำ', 'เบอร์โทรศัพท์นี้มีอยู่ในระบบแล้ว');
+                }
+            }
+        }
+
+        // Populate addresses
+        function populateAddresses(addresses) {
+            const addressList = document.getElementById('address-list');
+            addressList.innerHTML = '';
+            if (addresses.length === 0) {
+                addressList.innerHTML = '<p style="text-align: center; color: #4b5563;">ยังไม่มีที่อยู่นี้</p>';
+                return;
+            }
+            addresses.forEach((address, index) => {
+                const div = document.createElement('div');
+                div.className = 'address-item animate-fadeInUp reveal';
+                div.style.animationDelay = `${index * 0.1}s`;
+                div.innerHTML = `
+                    <span><i class="fas fa-map-marker-alt"></i> ${formatAddress(address)}</span>
+                    <button onclick="deleteAddress(${index})"><i class="fas fa-trash-alt"></i> ลบ</button>
+                `;
+                addressList.appendChild(div);
+            });
+        }
+
+        // Delete address
+        function deleteAddress(index) {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const loggedInEmail = localStorage.getItem('loggedInEmail');
+            const userIndex = users.findIndex(u => u.email === loggedInEmail);
+            if (userIndex !== -1) {
+                const addresses = users[userIndex].addresses || [];
+                addresses.splice(index, 1);
+                users[userIndex].addresses = addresses;
+                localStorage.setItem('users', JSON.stringify(users));
+                populateAddresses(addresses);
+                showCustomAlert('success', 'ลบที่อยู่สำเร็จ!', 'ที่อยู่ถูกลบเรียบร้อยแล้ว');
+            }
+        }
+
+        // Show address form
+        function showAddressForm() {
+            const formContainer = document.getElementById('address-form-container');
+            formContainer.style.display = 'block';
+            document.getElementById('address-form').reset();
+            document.getElementById('province').value = '';
+            populateDistricts('');
+            document.getElementById('district').value = '';
+            populateSubdistricts('', '');
+            document.getElementById('subdistrict').value = '';
+            document.getElementById('zipcode').value = '';
+            window.scrollTo({ top: formContainer.offsetTop - 100, behavior: 'smooth' });
+        }
+
+        // Save address to localStorage
+        document.getElementById('address-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const street = document.getElementById('street').value;
+            const province = document.getElementById('province').value;
+            const district = document.getElementById('district').value;
+            const subdistrict = document.getElementById('subdistrict').value;
+            const zipcode = document.getElementById('zipcode').value;
+
+            if (!street || !province || !district || !subdistrict || !zipcode) {
+                showCustomAlert('error', 'กรอกข้อมูลไม่ครบ', 'กรุณากรอกข้อมูลที่อยู่ให้ครบถ้วน');
+                return;
+            }
+
+            const address = { street, province, district, subdistrict, zipcode };
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const loggedInEmail = localStorage.getItem('loggedInEmail');
+            const userIndex = users.findIndex(u => u.email === loggedInEmail);
+            if (userIndex !== -1) {
+                const addresses = users[userIndex].addresses || [];
+                addresses.push(address);
+                users[userIndex].addresses = addresses;
+                localStorage.setItem('users', JSON.stringify(users));
+                populateAddresses(addresses);
+                document.getElementById('address-form-container').style.display = 'none';
+                showCustomAlert('success', 'บันทึกสำเร็จ!', 'ที่อยู่ของคุณได้รับการเพิ่มเรียบร้อยแล้ว');
+            } else {
+                showCustomAlert('error', 'เกิดข้อผิดพลาด', 'ไม่สามารถบันทึกที่อยู่ได้ กรุณาล็อกอินใหม่');
+            }
+        });
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('loggedInEmail');
+            showCustomAlert('success', 'ออกจากระบบสำเร็จ', 'คุณได้ออกจากระบบเรียบร้อยแล้ว');
+            setTimeout(() => window.location.href = 'login.html', 2000);
+        }
+
+        // Toggle cart (placeholder function)
+        function toggleCart() {
+            window.location.href = 'cart.html';
+        }
+
+        // Populate purchase history
+        function populatePurchaseHistory(purchases) {
+            const purchaseHistory = document.getElementById('purchase-history');
+            const purchaseList = document.getElementById('purchase-list');
+            purchaseList.innerHTML = '';
+
+            if (purchases.length === 0) {
+                purchaseHistory.style.display = 'none';
+                return;
+            }
+
+            purchaseHistory.style.display = 'block';
+            purchases.forEach((purchase, index) => {
+                const div = document.createElement('div');
+                div.className = 'purchase-item animate-fadeInUp reveal';
+                div.style.animationDelay = `${index * 0.1}s`;
+                div.innerHTML = `
+                    <div class="purchase-details">
+                        <p><i class="fas fa-barcode"></i><strong>รหัสคำสั่งซื้อ:</strong> ${purchase.id}</p>
+                        <p><i class="fas fa-calendar-alt"></i><strong>วันที่:</strong> ${purchase.date}</p>
+                        <p><i class="fas fa-shopping-bag"></i><strong>สินค้า:</strong> ${purchase.product}</p>
+                        <p><i class="fas fa-cubes"></i><strong>จำนวน:</strong> ${purchase.quantity}</p>
+                        <p><i class="fas fa-wallet"></i><strong>ยอดรวม:</strong> ${purchase.total} บาท</p>
+                    </div>
+                    <button onclick="showPurchaseDetail(${index})"><i class="fas fa-eye"></i> ดูรายละเอียด</button>
+                `;
+                purchaseList.appendChild(div);
+            });
+        }
+
+        // Show purchase detail modal
+        function showPurchaseDetail(index) {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const loggedInEmail = localStorage.getItem('loggedInEmail');
+            const user = users.find(u => u.email === loggedInEmail);
+            if (!user || !user.purchases || !user.purchases[index]) return;
+
+            const purchase = user.purchases[index];
+            const detailContent = document.getElementById('purchase-detail-content');
+            detailContent.innerHTML = `
+                <p><i class="fas fa-barcode"></i><strong>รหัสคำสั่งซื้อ:</strong> ${purchase.id}</p>
+                <p><i class="fas fa-calendar-alt"></i><strong>วันที่:</strong> ${purchase.date}</p>
+                <p><i class="fas fa-shopping-bag"></i><strong>สินค้า:</strong> ${purchase.product}</p>
+                <p><i class="fas fa-cubes"></i><strong>จำนวน:</strong> ${purchase.quantity}</p>
+                <p><i class="fas fa-wallet"></i><strong>ยอดรวม:</strong> ${purchase.total} บาท</p>
+            `;
+            document.getElementById('purchase-detail-overlay').classList.add('active');
+        }
+
+        // Close purchase detail modal
+        function closePurchaseDetail() {
+            document.getElementById('purchase-detail-overlay').classList.remove('active');
+        }
+
+        // Custom Alert Functions
+        function showCustomAlert(type, title, message) {
+            const overlay = document.getElementById('alert-overlay');
+            const alertBox = overlay.querySelector('.custom-alert');
+            const icon = document.getElementById('alert-icon');
+            const alertTitle = document.getElementById('alert-title');
+            const alertMessage = document.getElementById('alert-message');
+            const button = overlay.querySelector('button');
+
+            alertBox.classList.remove('success', 'error');
+            button.classList.remove('error');
+            if (type === 'success') {
+                alertBox.classList.add('success');
+                icon.className = 'fas fa-check-circle';
+            } else if (type === 'error') {
+                alertBox.classList.add('error');
+                icon.className = 'fas fa-exclamation-circle';
+                button.classList.add('error');
+            }
+            
+            alertTitle.textContent = title;
+            alertMessage.textContent = message;
+            overlay.classList.add('active');
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('alert-overlay').classList.remove('active');
+        }
+
+        // Event listeners for address dropdowns
+        document.getElementById('province').addEventListener('change', async (e) => {
+            await populateDistricts(e.target.value);
+        });
+
+        document.getElementById('district').addEventListener('change', async (e) => {
+            const province = document.getElementById('province').value;
+            await populateSubdistricts(province, e.target.value);
+        });
+
+        document.getElementById('subdistrict').addEventListener('change', (e) => {
+            const zipcodeInput = document.getElementById('zipcode');
+            const selectedOption = e.target.options[e.target.selectedIndex];
+            zipcodeInput.value = selectedOption.dataset.zipcode || '';
+        });
+
+        // Scroll Animation
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            const reveals = document.querySelectorAll('.reveal');
+            for (let i = 0; i < reveals.length; i++) {
+                let windowHeight = window.innerHeight;
+                let elementTop = reveals[i].getBoundingClientRect().top;
+                let elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add('active');
+                } else {
+                    reveals[i].classList.remove('active');
+                }
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async () => {
+            await populateProvinces();
+            await loadUserData();
+        });
+    </script>
+</body>
+</html>
