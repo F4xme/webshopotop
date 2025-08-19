@@ -28,11 +28,11 @@
 
     <main>
         <div class="account-container">
-            <div class="account-header reveal">
+            <div class="account-header">
                 <h1>บัญชีของฉัน</h1>
                 <p>จัดการข้อมูลส่วนตัว รูปโปรไฟล์ ที่อยู่ เบอร์โทรศัพท์ และประวัติการซื้อของ</p>
             </div>
-            <div class="account-info reveal">
+            <div class="account-info">
                 <div class="profile-picture-container">
                     <img id="profile-picture" class="profile-picture" src="" alt="รูปโปรไฟล์" style="display: none;">
                     <div id="profile-picture-placeholder" class="profile-picture-placeholder">ไม่มีรูปโปรไฟล์</div>
@@ -54,12 +54,12 @@
                     </div>
                 </div>
             </div>
-            <div class="address-section reveal">
+            <div class="address-section">
                 <h3>ที่อยู่</h3>
                 <div class="address-list" id="address-list"></div>
                 <button class="add-address-btn" onclick="showAddressForm()">เพิ่มที่อยู่ใหม่</button>
             </div>
-            <div class="account-form reveal" id="address-form-container" style="display: none;">
+            <div class="account-form" id="address-form-container" style="display: none;">
                 <h3>เพิ่ม/แก้ไขที่อยู่</h3>
                 <form id="address-form">
                     <div class="form-group">
@@ -95,7 +95,7 @@
                     <button type="submit">บันทึกที่อยู่</button>
                 </form>
             </div>
-            <div class="purchase-history reveal" id="purchase-history">
+            <div class="purchase-history" id="purchase-history">
                 <h3>ประวัติการซื้อ</h3>
                 <div id="purchase-list"></div>
             </div>
@@ -121,9 +121,9 @@
         </div>
     </div>
 
-     <footer id="contact">
+    <footer id="contact">
         <div class="footer-container">
-            <div class="footer-section reveal">
+            <div class="footer-section">
                 <h3>เกี่ยวกับร้าน OTOP ชุมชน</h3>
                 <p>เราคือร้านค้าที่นำเสนอผลิตภัณฑ์ OTOP คุณภาพสูงจากชุมชนบ้านนาเวียง สนับสนุนงานฝีมือท้องถิ่นและความยั่งยืน</p>
                 <div class="social-icons">
@@ -132,7 +132,7 @@
                     <a href="https://www.instagram.com/f4x_me/" class="social-icon"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
-            <div class="footer-section reveal">
+            <div class="footer-section">
                 <h3>ลิงก์ด่วน</h3>
                 <ul class="footer-links">
                     <li><a href="home.html" class="footer-link">หน้าแรก</a></li>
@@ -141,18 +141,17 @@
                     <li><a href="contact.html" class="footer-link">ติดต่อ</a></li>
                 </ul>
             </div>
-            <div class="footer-section reveal">
+            <div class="footer-section">
                 <h3>ติดต่อเรา</h3>
                 <p><i class="fas fa-envelope"></i> อีเมล: piyasanw@gmail.com</p>
                 <p><i class="fas fa-phone-alt"></i> โทร: 06-23892553</p>
                 <p><i class="fas fa-map-marker-alt"></i> ที่อยู่: หมู่ 1 ต.นาเวียง อ.เสนางคนิคม จ.อำนาจเจริญ 37290</p>
             </div>
         </div>
-        <div class="footer-credit reveal">
+        <div class="footer-credit">
             <p>© 2025 ร้าน OTOP ชุมชนบ้านนาเวียง. สงวนลิขสิทธิ์.</p>
         </div>
     </footer>
-
 
     <script>
         // Fetch address data from API
@@ -384,7 +383,7 @@
             }
             addresses.forEach((address, index) => {
                 const div = document.createElement('div');
-                div.className = 'address-item animate-fadeInUp reveal';
+                div.className = 'address-item animate-fadeInUp';
                 div.style.animationDelay = `${index * 0.1}s`;
                 div.innerHTML = `
                     <span><i class="fas fa-map-marker-alt"></i> ${formatAddress(address)}</span>
@@ -466,21 +465,32 @@
             window.location.href = 'cart.html';
         }
 
+        // Format payment status for display
+        function formatPaymentStatus(status) {
+            switch (status) {
+                case 'paid': return 'ชำระแล้ว';
+                case 'pending': return 'รอชำระ';
+                case 'cancelled': return 'ยกเลิก';
+                default: return 'ไม่ระบุ';
+            }
+        }
+
         // Populate purchase history
         function populatePurchaseHistory(purchases) {
             const purchaseHistory = document.getElementById('purchase-history');
             const purchaseList = document.getElementById('purchase-list');
             purchaseList.innerHTML = '';
 
-            if (purchases.length === 0) {
+            const filteredPurchases = purchases.filter(p => p.paymentStatus !== 'cancelled');
+            if (filteredPurchases.length === 0) {
                 purchaseHistory.style.display = 'none';
                 return;
             }
 
             purchaseHistory.style.display = 'block';
-            purchases.forEach((purchase, index) => {
+            filteredPurchases.forEach((purchase, index) => {
                 const div = document.createElement('div');
-                div.className = 'purchase-item animate-fadeInUp reveal';
+                div.className = 'purchase-item animate-fadeInUp';
                 div.style.animationDelay = `${index * 0.1}s`;
                 div.innerHTML = `
                     <div class="purchase-details">
@@ -489,6 +499,7 @@
                         <p><i class="fas fa-shopping-bag"></i><strong>สินค้า:</strong> ${purchase.product}</p>
                         <p><i class="fas fa-cubes"></i><strong>จำนวน:</strong> ${purchase.quantity}</p>
                         <p><i class="fas fa-wallet"></i><strong>ยอดรวม:</strong> ${purchase.total} บาท</p>
+                        <p><i class="fas fa-credit-card"></i><strong>สถานะ:</strong> <span class="status-${purchase.paymentStatus}">${formatPaymentStatus(purchase.paymentStatus)}</span></p>
                     </div>
                     <button onclick="showPurchaseDetail(${index})"><i class="fas fa-eye"></i> ดูรายละเอียด</button>
                 `;
@@ -501,9 +512,12 @@
             const users = JSON.parse(localStorage.getItem('users')) || [];
             const loggedInEmail = localStorage.getItem('loggedInEmail');
             const user = users.find(u => u.email === loggedInEmail);
-            if (!user || !user.purchases || !user.purchases[index]) return;
+            if (!user || !user.purchases) return;
 
-            const purchase = user.purchases[index];
+            const filteredPurchases = user.purchases.filter(p => p.paymentStatus !== 'cancelled');
+            if (!filteredPurchases[index]) return;
+
+            const purchase = filteredPurchases[index];
             const detailContent = document.getElementById('purchase-detail-content');
             detailContent.innerHTML = `
                 <p><i class="fas fa-barcode"></i><strong>รหัสคำสั่งซื้อ:</strong> ${purchase.id}</p>
@@ -511,6 +525,7 @@
                 <p><i class="fas fa-shopping-bag"></i><strong>สินค้า:</strong> ${purchase.product}</p>
                 <p><i class="fas fa-cubes"></i><strong>จำนวน:</strong> ${purchase.quantity}</p>
                 <p><i class="fas fa-wallet"></i><strong>ยอดรวม:</strong> ${purchase.total} บาท</p>
+                <p><i class="fas fa-credit-card"></i><strong>สถานะ:</strong> <span class="status-${purchase.paymentStatus}">${formatPaymentStatus(purchase.paymentStatus)}</span></p>
             `;
             document.getElementById('purchase-detail-overlay').classList.add('active');
         }
@@ -545,6 +560,7 @@
             overlay.classList.add('active');
         }
 
+        // Close custom alert
         function closeCustomAlert() {
             document.getElementById('alert-overlay').classList.remove('active');
         }
@@ -563,28 +579,6 @@
             const zipcodeInput = document.getElementById('zipcode');
             const selectedOption = e.target.options[e.target.selectedIndex];
             zipcodeInput.value = selectedOption.dataset.zipcode || '';
-        });
-
-        // Scroll Animation
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-            
-            const reveals = document.querySelectorAll('.reveal');
-            for (let i = 0; i < reveals.length; i++) {
-                let windowHeight = window.innerHeight;
-                let elementTop = reveals[i].getBoundingClientRect().top;
-                let elementVisible = 150;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add('active');
-                } else {
-                    reveals[i].classList.remove('active');
-                }
-            }
         });
 
         // Initialize page
